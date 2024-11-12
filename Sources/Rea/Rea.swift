@@ -9,7 +9,7 @@ import MetalKit
 public class ReaWindow: NSWindow {
     var renderer = Renderer()
     
-    override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
+    public override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
         super.init(
             contentRect: contentRect,
             styleMask: style,
