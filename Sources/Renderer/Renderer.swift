@@ -9,12 +9,6 @@ import MetalKit
 
 @MainActor
 public class Renderer: NSObject, MTKViewDelegate {
-    var device: MTLDevice?
-    
-    public override init() {
-        device = Graphics.device
-    }
-    
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
     }
     
