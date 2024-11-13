@@ -12,6 +12,10 @@ class ApplicationDelegate: NSResponder, NSApplicationDelegate {
         )
         window.center()
         window.makeKeyAndOrderFront(nil)
+        window.title = "Rea Engine"
+        
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate()
     }
 }
 
