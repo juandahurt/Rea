@@ -17,7 +17,10 @@ let package = Package(
             dependencies: [.target(name: "Renderer")]
         ),
         // MARK: - Renderer
-        .target(name: "Renderer"),
+        .target(
+            name: "Renderer",
+            resources: [.process("Shaders")]
+        ),
         
         // MARK: - Demo App
         .executableTarget(

@@ -8,6 +8,7 @@ import MetalKit
 
 public class ReaWindow: NSWindow {
     var renderer = Renderer()
+    var metalView = MetalView()
     
     public override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
         super.init(
@@ -17,10 +18,8 @@ public class ReaWindow: NSWindow {
             defer: flag
         )
         
-        let metalView = MTKView()
         contentView = metalView
         metalView.delegate = renderer
-        metalView.colorPixelFormat = .rgba8Unorm
     }
 }
 #endif

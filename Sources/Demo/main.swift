@@ -10,8 +10,8 @@ class ApplicationDelegate: NSResponder, NSApplicationDelegate {
             backing: .buffered,
             defer: false
         )
-        window.makeKeyAndOrderFront(nil)
         window.center()
+        window.makeKeyAndOrderFront(nil)
     }
 }
 
