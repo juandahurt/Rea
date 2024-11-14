@@ -19,8 +19,12 @@ let package = Package(
         // MARK: - Renderer
         .target(
             name: "Renderer",
+            dependencies: [.target(name: "Shared")],
             resources: [.process("Shaders")]
         ),
+
+        // MARK: - Shared types
+        .target(name: "Shared"),
         
         // MARK: - Demo App
         .executableTarget(
