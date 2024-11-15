@@ -9,7 +9,7 @@ import Metal
 
 @MainActor
 struct Graphics {
-    static var device: MTLDevice = {
+    static let device: MTLDevice = {
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("GPU is not available")
         }

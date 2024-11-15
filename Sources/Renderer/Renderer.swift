@@ -12,21 +12,7 @@ import Shared
 public class Renderer: NSObject {
     var pipelineState: MTLRenderPipelineState?
    
-    var vertices: [Vertex] = [
-        .init(
-            position: [0, 0, 0],
-            color: [1, 0, 0, 1]
-        ),
-        .init(
-            position: [1, 1, 0],
-            color: [0, 1, 0, 1]
-        ),
-        .init(
-            position: [0, 0.5, 0],
-            color: [0, 0, 1, 1]
-        )
-    ]
-    var vertexBuffer: MTLBuffer?
+    let quad = Quad()
     
     public override init() {
         super.init()
@@ -57,11 +43,6 @@ public class Renderer: NSObject {
         
         pipelineState = try? Graphics.device
             .makeRenderPipelineState(descriptor: pipelineDescriptor)
-        
-        vertexBuffer = Graphics.device.makeBuffer(
-            bytes: &vertices,
-            length: MemoryLayout<Vertex>.stride * vertices.count
-        )
     }
 }
 
@@ -81,16 +62,19 @@ extension Renderer: MTKViewDelegate {
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)
        
         renderEncoder?.setVertexBuffer(
-            vertexBuffer,
+            quad.vertexBuffer,
             offset: 0,
             index: 0
         )
         renderEncoder?.setRenderPipelineState(pipelineState)
-        renderEncoder?.drawPrimitives(
-            type: .triangle,
-            vertexStart: 0,
-            vertexCount: vertices.count
-        )
+        renderEncoder?
+            .drawIndexedPrimitives(
+                type: .triangle,
+                indexCount: quad.indices.count,
+                indexType: .uint16,
+                indexBuffer: quad.indexBuffer!,
+                indexBufferOffset: 0
+            )
         
         renderEncoder?.endEncoding()
         commandBuffer.present(drawable)
