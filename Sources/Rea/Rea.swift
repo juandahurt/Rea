@@ -1,6 +1,3 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
-
 #if canImport(AppKit)
 import AppKit
 import Renderer
