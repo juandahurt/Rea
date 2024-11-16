@@ -16,6 +16,7 @@ class TestScene: Scene {
     }
     
     override func update() {
-        print("on update")
+        let transform: TransformComponent = player.getComponent()
+        transform.position.x += 1
     }
 }

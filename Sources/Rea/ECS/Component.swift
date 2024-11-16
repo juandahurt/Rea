@@ -5,10 +5,12 @@
 //  Created by Juan David Hurtado on 15/11/24.
 //
 
+import ReaCore
+
 public class Component {
     var isActive = false
 }
 
 public class TransformComponent: Component {
-//    var position:
+    public var position: Vec3 = .zero
 }
