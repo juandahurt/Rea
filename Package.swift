@@ -14,13 +14,8 @@ let package = Package(
     targets: [
         .target(
             name: "Rea",
-            dependencies: [.target(name: "Renderer")]
-        ),
-        // MARK: - Renderer
-        .target(
-            name: "Renderer",
-            dependencies: [.target(name: "Shared")],
-            resources: [.process("Shaders")]
+            dependencies: ["Shared"],
+            resources: [.process("Renderer/Shaders")]
         ),
 
         // MARK: - Shared types

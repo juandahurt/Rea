@@ -7,7 +7,7 @@
 
 import MetalKit
 
-public class MetalView: MTKView {
+class MetalView: MTKView {
     public init() {
         super.init(frame: .zero, device: Graphics.device)
         

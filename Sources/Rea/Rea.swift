@@ -1,6 +1,5 @@
 #if canImport(AppKit)
 import AppKit
-import Renderer
 import MetalKit
 
 @MainActor

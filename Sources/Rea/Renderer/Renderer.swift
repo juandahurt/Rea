@@ -9,14 +9,14 @@ import MetalKit
 import Shared
 
 @MainActor
-public protocol RendererDelegate: AnyObject {
+protocol RendererDelegate: AnyObject {
     /// Called just before rendering the current frame
     func willRenderFrame()
 }
 
 @MainActor
-public class Renderer: NSObject {
-    public weak var delegate: RendererDelegate?
+class Renderer: NSObject {
+    weak var delegate: RendererDelegate?
     
     var pipelineState: MTLRenderPipelineState?
    
