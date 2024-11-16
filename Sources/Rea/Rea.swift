@@ -13,7 +13,11 @@ class Rea { // this is just like a scene manager?
 public class ReaWindow: NSWindow {
     var renderer = Renderer()
     var metalView = MetalView()
-    public var scene: Scene?
+    public var scene: Scene? {
+        didSet {
+            Rea.currentScene = scene
+        }
+    }
     
     public override init(
         contentRect: NSRect,
@@ -30,7 +34,13 @@ public class ReaWindow: NSWindow {
         
         contentView = metalView
         metalView.delegate = renderer
-        Rea.currentScene = scene
+        renderer.delegate = self
+    }
+}
+
+extension ReaWindow: RendererDelegate {
+    public func willRenderFrame() {
+        Rea.currentScene?.update()
     }
 }
 #endif

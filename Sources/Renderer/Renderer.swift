@@ -9,7 +9,15 @@ import MetalKit
 import Shared
 
 @MainActor
+public protocol RendererDelegate: AnyObject {
+    /// Called just before rendering the current frame
+    func willRenderFrame()
+}
+
+@MainActor
 public class Renderer: NSObject {
+    public weak var delegate: RendererDelegate?
+    
     var pipelineState: MTLRenderPipelineState?
    
     let quad = Quad()
@@ -59,6 +67,9 @@ extension Renderer: MTKViewDelegate {
         else {
             return
         }
+        
+        delegate?.willRenderFrame()
+        
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)
        
         renderEncoder?.setVertexBuffer(
