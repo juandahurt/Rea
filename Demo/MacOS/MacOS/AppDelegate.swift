@@ -17,6 +17,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             defer: false
         )
         
+        window.scene = TestScene()
+        
         window.center()
         window.title = "Rea Engine"
         window.makeKeyAndOrderFront(nil)
