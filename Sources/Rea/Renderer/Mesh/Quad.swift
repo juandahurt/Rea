@@ -5,7 +5,7 @@
 //  Created by Juan David Hurtado on 15/11/24.
 //
 
-import Shared
+import ReaCore
 import Metal
 
 @MainActor

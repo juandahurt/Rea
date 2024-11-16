@@ -14,12 +14,12 @@ let package = Package(
     targets: [
         .target(
             name: "Rea",
-            dependencies: ["Shared"],
+            dependencies: ["ReaCore"],
             resources: [.process("Renderer/Shaders")]
         ),
 
-        // MARK: - Shared types
-        .target(name: "Shared"),
+        // MARK: - Core types
+        .target(name: "ReaCore"),
         
         // MARK: - Demo App
         .executableTarget(

@@ -6,7 +6,7 @@
 //
 
 import MetalKit
-import Shared
+import ReaCore
 
 @MainActor
 protocol RendererDelegate: AnyObject {
