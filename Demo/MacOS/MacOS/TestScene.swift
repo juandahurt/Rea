@@ -12,11 +12,10 @@ class TestScene: Scene {
     
     override init() {
         super.init()
-        
         player = entityManager.makeEntity()
     }
     
     override func update() {
-        print(player)
+        print("on update")
     }
 }
