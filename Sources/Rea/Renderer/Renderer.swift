@@ -55,10 +55,10 @@ class Renderer: NSObject {
 }
 
 extension Renderer: MTKViewDelegate {
-    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
     }
     
-    public func draw(in view: MTKView) {
+    func draw(in view: MTKView) {
         guard
             let commandBuffer = Graphics.commandQueue.makeCommandBuffer(),
             let passDescriptor = view.currentRenderPassDescriptor,

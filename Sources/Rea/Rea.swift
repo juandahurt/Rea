@@ -38,7 +38,7 @@ public class ReaWindow: NSWindow {
 }
 
 extension ReaWindow: RendererDelegate {
-    public func willRenderFrame() {
+    func willRenderFrame() {
         Rea.currentScene?.update()
     }
 }
