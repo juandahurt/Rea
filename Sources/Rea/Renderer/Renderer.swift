@@ -7,6 +7,7 @@
 
 import MetalKit
 import ReaCore
+import ReaMath
 
 @MainActor
 protocol RendererDelegate: AnyObject {
@@ -20,7 +21,10 @@ class Renderer: NSObject {
     
     var pipelineState: MTLRenderPipelineState?
    
+    var uniforms = Uniforms()
     let quad = Quad()
+    
+    var aux: Float = 0
     
     public override init() {
         super.init()
@@ -56,6 +60,18 @@ class Renderer: NSObject {
 
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        let aspect = size.width / size.height
+        let viewSize: CGFloat = 10 * CGFloat(sin(aux))
+        uniforms.projection = ortho(
+            .init(
+                x: -viewSize * aspect * 0.5,
+                y: viewSize * 0.5,
+                width: viewSize * aspect,
+                height: viewSize
+            ),
+            near: 0,
+            far: 10
+        )
     }
     
     func draw(in view: MTKView) {
@@ -71,7 +87,30 @@ extension Renderer: MTKViewDelegate {
         delegate?.willRenderFrame()
         
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)
-       
+
+        let aspect = view.frame.width / view.frame.height
+        let viewSize: CGFloat = 10
+        uniforms.projection = ortho(
+            .init(
+                x: -viewSize * aspect * 0.5,
+                y: viewSize * 0.5,
+                width: viewSize * aspect,
+                height: viewSize
+            ),
+            near: 0,
+            far: 10
+        )
+        
+        uniforms.model = matrix_identity_float4x4
+        translate(&uniforms.view, to: [0, 0, 0])
+        
+        aux += 0.01
+        
+        renderEncoder?.setVertexBytes(
+            &uniforms,
+            length: MemoryLayout<Uniforms>.stride,
+            index: 10
+        )
         renderEncoder?.setVertexBuffer(
             quad.vertexBuffer,
             offset: 0,

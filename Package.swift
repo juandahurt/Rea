@@ -14,17 +14,13 @@ let package = Package(
     targets: [
         .target(
             name: "Rea",
-            dependencies: ["ReaCore"],
+            dependencies: ["ReaCore", "ReaMath"],
             resources: [.process("Renderer/Shaders")]
         ),
 
-        // MARK: - Core types
-        .target(name: "ReaCore"),
+        .target(name: "ReaMath", dependencies: ["ReaCore"]),
         
-        // MARK: - Demo App
-        .executableTarget(
-            name: "Demo",
-            dependencies: [.target(name: "Rea")]
-        )
+        // MARK: - Core types
+        .target(name: "ReaCore")
     ]
 )
