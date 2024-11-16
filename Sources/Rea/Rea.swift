@@ -1,6 +1,5 @@
 #if canImport(AppKit)
 import AppKit
-import Renderer
 import MetalKit
 
 @MainActor
@@ -39,7 +38,7 @@ public class ReaWindow: NSWindow {
 }
 
 extension ReaWindow: RendererDelegate {
-    public func willRenderFrame() {
+    func willRenderFrame() {
         Rea.currentScene?.update()
     }
 }

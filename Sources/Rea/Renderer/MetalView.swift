@@ -7,8 +7,8 @@
 
 import MetalKit
 
-public class MetalView: MTKView {
-    public init() {
+class MetalView: MTKView {
+    init() {
         super.init(frame: .zero, device: Graphics.device)
         
         colorPixelFormat = .bgra8Unorm

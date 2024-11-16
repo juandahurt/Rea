@@ -5,7 +5,7 @@
 //  Created by Juan Hurtado on 12/11/24.
 //
 
-#import "../../Shared/include/Shared.h"
+#import "../../../Shared/include/Shared.h"
 
 #import <metal_stdlib>
 using namespace metal;
