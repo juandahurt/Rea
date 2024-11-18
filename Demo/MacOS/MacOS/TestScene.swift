@@ -15,8 +15,8 @@ class TestScene: Scene {
         player = entityManager.makeEntity()
     }
     
-    override func update() {
+    override func update(deltaTime: Float) {
         let transform: TransformComponent = player.getComponent()
-        transform.position.x += 1
+        transform.position.x += 0.09 * deltaTime
     }
 }

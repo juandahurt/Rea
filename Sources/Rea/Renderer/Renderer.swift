@@ -11,8 +11,8 @@ import ReaMath
 
 @MainActor
 protocol RendererDelegate: AnyObject {
-    /// Called just before rendering the current frame
-    func willRenderFrame()
+    func renderer(_ renderer: Renderer, updateSceneWith deltaTime: Float)
+    func renderer(_ renderer: Renderer, renderSceneUsing encoder: MTLRenderCommandEncoder, uniforms: inout Uniforms)
 }
 
 @MainActor
@@ -22,9 +22,8 @@ class Renderer: NSObject {
     var pipelineState: MTLRenderPipelineState?
    
     var uniforms = Uniforms()
-    let quad = Quad()
     
-    var aux: Float = 0
+    private var lasTime = CFAbsoluteTimeGetCurrent()
     
     public override init() {
         super.init()
@@ -61,7 +60,7 @@ class Renderer: NSObject {
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         let aspect = size.width / size.height
-        let viewSize: CGFloat = 10 * CGFloat(sin(aux))
+        let viewSize: CGFloat = 10
         uniforms.projection = ortho(
             .init(
                 x: -viewSize * aspect * 0.5,
@@ -83,13 +82,13 @@ extension Renderer: MTKViewDelegate {
         else {
             return
         }
+        let deltaTime = calculateDeltaTime()
+        delegate?.renderer(self, updateSceneWith: deltaTime)
+        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)!
+        renderEncoder.setRenderPipelineState(pipelineState)
         
-        delegate?.willRenderFrame()
-        
-        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)
-
-        let aspect = view.frame.width / view.frame.height
         let viewSize: CGFloat = 10
+        let aspect = view.bounds.width / view.bounds.height
         uniforms.projection = ortho(
             .init(
                 x: -viewSize * aspect * 0.5,
@@ -100,34 +99,20 @@ extension Renderer: MTKViewDelegate {
             near: 0,
             far: 10
         )
-        
-        uniforms.model = matrix_identity_float4x4
         translate(&uniforms.view, to: [0, 0, 0])
-        
-        aux += 0.01
-        
-        renderEncoder?.setVertexBytes(
-            &uniforms,
-            length: MemoryLayout<Uniforms>.stride,
-            index: 10
-        )
-        renderEncoder?.setVertexBuffer(
-            quad.vertexBuffer,
-            offset: 0,
-            index: 0
-        )
-        renderEncoder?.setRenderPipelineState(pipelineState)
-        renderEncoder?
-            .drawIndexedPrimitives(
-                type: .triangle,
-                indexCount: quad.indices.count,
-                indexType: .uint16,
-                indexBuffer: quad.indexBuffer!,
-                indexBufferOffset: 0
-            )
-        
-        renderEncoder?.endEncoding()
+        delegate?.renderer(self, renderSceneUsing: renderEncoder, uniforms: &uniforms)
+
+        renderEncoder.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
+    }
+}
+
+extension Renderer {
+    func calculateDeltaTime() -> Float {
+        let currentTime = CFAbsoluteTimeGetCurrent()
+        let deltaTime = Float(currentTime - lasTime)
+        lasTime = currentTime
+        return deltaTime
     }
 }

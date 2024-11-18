@@ -14,7 +14,7 @@ public class ReaWindow: NSWindow {
     var metalView = MetalView()
     public var scene: Scene? {
         didSet {
-            Rea.currentScene = scene
+            renderer.delegate = scene
         }
     }
     
@@ -33,13 +33,6 @@ public class ReaWindow: NSWindow {
         
         contentView = metalView
         metalView.delegate = renderer
-        renderer.delegate = self
-    }
-}
-
-extension ReaWindow: RendererDelegate {
-    func willRenderFrame() {
-        Rea.currentScene?.update()
     }
 }
 #endif

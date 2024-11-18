@@ -8,7 +8,8 @@
 public class Entity {
     var id: UInt8 // TODO: maybe have a type alias for this
     private var components: [Component] = [
-        TransformComponent()
+        TransformComponent(),
+        RenderableComponent()
     ] // TODO: create a memory pool
     
     init(_ id: UInt8) {
