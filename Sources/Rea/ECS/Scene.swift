@@ -11,6 +11,6 @@ open class Scene {
     
     public init() {}
     
-    open func update() { //TODO: add delta time (?))
+    open func update(deltaTime: Float) {
     }
 }

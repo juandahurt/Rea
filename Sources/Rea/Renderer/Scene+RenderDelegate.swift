@@ -10,11 +10,15 @@ import ReaCore
 import ReaMath
 
 extension Scene: RendererDelegate {
-    func updateScene() {
-        update()
+    func renderer(_ renderer: Renderer, updateSceneWith deltaTime: Float) {
+        update(deltaTime: deltaTime)
     }
-
-    func drawScene(with encoder: any MTLRenderCommandEncoder, uniforms: inout Uniforms) {
+    
+    func renderer(
+        _ renderer: Renderer,
+        renderSceneUsing encoder: any MTLRenderCommandEncoder,
+        uniforms: inout Uniforms
+    ) {
         for e in entityManager.entities {
             let transform: TransformComponent = e.getComponent()
             translate(

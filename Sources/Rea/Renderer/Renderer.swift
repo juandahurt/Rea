@@ -11,8 +11,8 @@ import ReaMath
 
 @MainActor
 protocol RendererDelegate: AnyObject {
-    func updateScene()
-    func drawScene(with encoder: MTLRenderCommandEncoder, uniforms: inout Uniforms)
+    func renderer(_ renderer: Renderer, updateSceneWith deltaTime: Float)
+    func renderer(_ renderer: Renderer, renderSceneUsing encoder: MTLRenderCommandEncoder, uniforms: inout Uniforms)
 }
 
 @MainActor
@@ -22,9 +22,8 @@ class Renderer: NSObject {
     var pipelineState: MTLRenderPipelineState?
    
     var uniforms = Uniforms()
-    let quad = Quad()
     
-    var aux: Float = 0
+    private var lasTime = CFAbsoluteTimeGetCurrent()
     
     public override init() {
         super.init()
@@ -83,8 +82,8 @@ extension Renderer: MTKViewDelegate {
         else {
             return
         }
-        
-        delegate?.updateScene()
+        let deltaTime = calculateDeltaTime()
+        delegate?.renderer(self, updateSceneWith: deltaTime)
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)!
         renderEncoder.setRenderPipelineState(pipelineState)
         
@@ -101,32 +100,19 @@ extension Renderer: MTKViewDelegate {
             far: 10
         )
         translate(&uniforms.view, to: [0, 0, 0])
-        delegate?.drawScene(with: renderEncoder, uniforms: &uniforms)
-//        let viewSize: CGFloat = 10
-        
-        
-//        renderEncoder?.setVertexBytes(
-//            &uniforms,
-//            length: MemoryLayout<Uniforms>.stride,
-//            index: 10
-//        )
-//        renderEncoder?.setVertexBuffer(
-//            quad.vertexBuffer,
-//            offset: 0,
-//            index: 0
-//        )
-        
-//        renderEncoder?
-//            .drawIndexedPrimitives(
-//                type: .triangle,
-//                indexCount: quad.indices.count,
-//                indexType: .uint16,
-//                indexBuffer: quad.indexBuffer!,
-//                indexBufferOffset: 0
-//            )
-//        
+        delegate?.renderer(self, renderSceneUsing: renderEncoder, uniforms: &uniforms)
+
         renderEncoder.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
+    }
+}
+
+extension Renderer {
+    func calculateDeltaTime() -> Float {
+        let currentTime = CFAbsoluteTimeGetCurrent()
+        let deltaTime = Float(currentTime - lasTime)
+        lasTime = currentTime
+        return deltaTime
     }
 }
