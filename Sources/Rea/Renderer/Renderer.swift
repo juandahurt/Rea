@@ -11,8 +11,8 @@ import ReaMath
 
 @MainActor
 protocol RendererDelegate: AnyObject {
-    /// Called just before rendering the current frame
-    func willRenderFrame()
+    func updateScene()
+    func drawScene(with encoder: MTLRenderCommandEncoder, uniforms: inout Uniforms)
 }
 
 @MainActor
@@ -61,7 +61,7 @@ class Renderer: NSObject {
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         let aspect = size.width / size.height
-        let viewSize: CGFloat = 10 * CGFloat(sin(aux))
+        let viewSize: CGFloat = 10
         uniforms.projection = ortho(
             .init(
                 x: -viewSize * aspect * 0.5,
@@ -84,12 +84,12 @@ extension Renderer: MTKViewDelegate {
             return
         }
         
-        delegate?.willRenderFrame()
+        delegate?.updateScene()
+        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)!
+        renderEncoder.setRenderPipelineState(pipelineState)
         
-        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)
-
-        let aspect = view.frame.width / view.frame.height
         let viewSize: CGFloat = 10
+        let aspect = view.bounds.width / view.bounds.height
         uniforms.projection = ortho(
             .init(
                 x: -viewSize * aspect * 0.5,
@@ -100,33 +100,32 @@ extension Renderer: MTKViewDelegate {
             near: 0,
             far: 10
         )
-        
-        uniforms.model = matrix_identity_float4x4
         translate(&uniforms.view, to: [0, 0, 0])
+        delegate?.drawScene(with: renderEncoder, uniforms: &uniforms)
+//        let viewSize: CGFloat = 10
         
-        aux += 0.01
         
-        renderEncoder?.setVertexBytes(
-            &uniforms,
-            length: MemoryLayout<Uniforms>.stride,
-            index: 10
-        )
-        renderEncoder?.setVertexBuffer(
-            quad.vertexBuffer,
-            offset: 0,
-            index: 0
-        )
-        renderEncoder?.setRenderPipelineState(pipelineState)
-        renderEncoder?
-            .drawIndexedPrimitives(
-                type: .triangle,
-                indexCount: quad.indices.count,
-                indexType: .uint16,
-                indexBuffer: quad.indexBuffer!,
-                indexBufferOffset: 0
-            )
+//        renderEncoder?.setVertexBytes(
+//            &uniforms,
+//            length: MemoryLayout<Uniforms>.stride,
+//            index: 10
+//        )
+//        renderEncoder?.setVertexBuffer(
+//            quad.vertexBuffer,
+//            offset: 0,
+//            index: 0
+//        )
         
-        renderEncoder?.endEncoding()
+//        renderEncoder?
+//            .drawIndexedPrimitives(
+//                type: .triangle,
+//                indexCount: quad.indices.count,
+//                indexType: .uint16,
+//                indexBuffer: quad.indexBuffer!,
+//                indexBufferOffset: 0
+//            )
+//        
+        renderEncoder.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
     }

@@ -36,10 +36,16 @@ public class ReaWindow: NSWindow {
         renderer.delegate = self
     }
 }
+import Metal
+import ReaCore
 
 extension ReaWindow: RendererDelegate {
-    func willRenderFrame() {
+    func updateScene() {
         Rea.currentScene?.update()
+    }
+    
+    func drawScene(with encoder: MTLRenderCommandEncoder, uniforms: inout Uniforms) {
+        Rea.currentScene?.draw(with: encoder, uniforms: &uniforms)
     }
 }
 #endif

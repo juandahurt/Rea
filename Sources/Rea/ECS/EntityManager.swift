@@ -6,10 +6,13 @@
 //
 
 public class EntityManager {
+    var entities: [Entity] = []
     var numEntities: UInt8 = 0
     
     public func makeEntity() -> Entity {
-        return Entity(numEntities)
         numEntities += 1
+        let newEntity = Entity(numEntities)
+        entities.append(newEntity)
+        return newEntity
     }
 }

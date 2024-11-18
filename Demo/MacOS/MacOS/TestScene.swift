@@ -17,6 +17,6 @@ class TestScene: Scene {
     
     override func update() {
         let transform: TransformComponent = player.getComponent()
-        transform.position.x += 1
+        transform.position.x += 0.09
     }
 }
