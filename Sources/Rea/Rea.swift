@@ -14,7 +14,7 @@ public class ReaWindow: NSWindow {
     var metalView = MetalView()
     public var scene: Scene? {
         didSet {
-            Rea.currentScene = scene
+            renderer.delegate = scene
         }
     }
     
@@ -33,19 +33,6 @@ public class ReaWindow: NSWindow {
         
         contentView = metalView
         metalView.delegate = renderer
-        renderer.delegate = self
-    }
-}
-import Metal
-import ReaCore
-
-extension ReaWindow: RendererDelegate {
-    func updateScene() {
-        Rea.currentScene?.update()
-    }
-    
-    func drawScene(with encoder: MTLRenderCommandEncoder, uniforms: inout Uniforms) {
-        Rea.currentScene?.draw(with: encoder, uniforms: &uniforms)
     }
 }
 #endif
