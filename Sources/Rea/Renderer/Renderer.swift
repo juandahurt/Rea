@@ -87,7 +87,7 @@ extension Renderer: MTKViewDelegate {
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)!
         renderEncoder.setRenderPipelineState(pipelineState)
         
-        let viewSize: CGFloat = 10
+        let viewSize: CGFloat = 50
         let aspect = view.bounds.width / view.bounds.height
         uniforms.projection = ortho(
             .init(

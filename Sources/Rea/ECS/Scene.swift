@@ -6,11 +6,12 @@
 //
 
 @MainActor
-open class Scene {
+open class Scene: InputEventHandler {
     public var entityManager = EntityManager()
     
     public init() {}
     
-    open func update(deltaTime: Float) {
-    }
+    open func update(deltaTime: Float) {}
+    
+    open func handleInput(event: Event) {}
 }
