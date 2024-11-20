@@ -23,6 +23,11 @@ extension Input {
             return .mouse(.mouseEntered)
         case .mouseExited:
             return .mouse(.mouseExited)
+        case .keyDown:
+            guard let key = Key(rawValue: event.keyCode) else {
+                fatalError("key not supported, yet. :)")
+            }
+            return .key(.keyDown(key))
         default:
             fatalError("unreachable code")
         }

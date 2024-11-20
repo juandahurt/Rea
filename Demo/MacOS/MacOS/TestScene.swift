@@ -22,12 +22,10 @@ class TestScene: Scene {
     }
     
     override func handleInput(event: Event) {
-        guard case let .mouse(mouseEvent) = event else {
-            return
+        if case let .key(keyEvent) = event {
+            if case let .keyDown(key) = keyEvent {
+               print(key)
+            }
         }
-        if case .mouseMoved = mouseEvent {
-            print("mouse moved!")
-        }
-        
     }
 }

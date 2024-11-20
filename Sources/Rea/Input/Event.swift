@@ -8,5 +8,6 @@
 public enum Event {
     #if os(macOS)
     case mouse(MouseEvent)
+    case key(KeyEvent)
     #endif
 }

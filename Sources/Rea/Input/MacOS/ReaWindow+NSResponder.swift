@@ -25,4 +25,11 @@ extension ReaWindow {
         Input.instance.notify(event)
     }
 }
+
+// MARK: - Keyboard
+extension ReaWindow {
+    public override func keyDown(with event: NSEvent) {
+        Input.instance.notify(event)
+    }
+}
 #endif
