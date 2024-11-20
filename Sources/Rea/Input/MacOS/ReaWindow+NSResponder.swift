@@ -14,15 +14,15 @@ import AppKit
 // MARK: - Mouse
 extension ReaWindow {
     public override func mouseMoved(with event: NSEvent) {
-        input.notify(event)
+        Input.instance.notify(event)
     }
     
     public override func mouseEntered(with event: NSEvent) {
-        input.notify(event)
+        Input.instance.notify(event)
     }
     
     public override func mouseExited(with event: NSEvent) {
-        input.notify(event)
+        Input.instance.notify(event)
     }
 }
 #endif
