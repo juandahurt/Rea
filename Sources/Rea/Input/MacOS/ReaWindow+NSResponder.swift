@@ -9,30 +9,25 @@
 import AppKit
 import ReaCore
 
-// I know it looks horrible, but I didn't really find a better way to
-// observe the events and getting, for example, the mouse location in the
-// window... so, yeah
 // MARK: - Mouse
+// it'd be interesting to support the mouse entered and exited event,
+// but since it needs a tracking view I'll leave that for later
 extension ReaWindow {
     public override func mouseMoved(with event: NSEvent) {
-        let location = event.locationInWindow
-        let mappedLocation: Vec2 = [Float(location.x), Float(location.y)]
-        input.mouseEventHandler?.mouseMoved(at: mappedLocation)
+        let location = event.locationInWindow.toVec2()
+        input.mouseEventHandler?.mouseMoved(at: location)
     }
     
-    public override func mouseEntered(with event: NSEvent) {
-        
-    }
-    
-    public override func mouseExited(with event: NSEvent) {
-        
+    public override func mouseDown(with event: NSEvent) {
+        let location = event.locationInWindow.toVec2()
+        input.mouseEventHandler?.mouseDown(at: location)
     }
 }
 
 // MARK: - Keyboard
 extension ReaWindow {
     public override func keyDown(with event: NSEvent) {
-//        Input.instance.notify(event)
+        
     }
 }
 #endif

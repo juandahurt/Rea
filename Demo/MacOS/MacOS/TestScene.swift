@@ -26,4 +26,10 @@ class TestScene: Scene {
     override func mouseMoved(at position: Vec2) {
         mousePos = position
     }
+    
+    override func mouseDown(at location: Vec2) {
+        let newEntity = entityManager.makeEntity()
+        let transform: TransformComponent = newEntity.getComponent()
+        transform.position = [location.x, location.y, 0]
+    }
 }

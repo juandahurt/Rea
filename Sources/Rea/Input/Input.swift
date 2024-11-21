@@ -18,5 +18,6 @@ public class Input {
 
 @MainActor
 public protocol MouseEventHandler: AnyObject {
-    func mouseMoved(at position: Vec2)
+    func mouseMoved(at location: Vec2)
+    func mouseDown(at location: Vec2)
 }

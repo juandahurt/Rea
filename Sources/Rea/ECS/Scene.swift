@@ -19,7 +19,8 @@ open class Scene {
 
 extension Scene: MouseEventHandler {
     @objc
-    open func mouseMoved(at position: Vec2) {
-        
-    }
+    open func mouseMoved(at location: Vec2) {}
+    
+    @objc
+    open func mouseDown(at location: Vec2) {}
 }
