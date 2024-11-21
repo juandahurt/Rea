@@ -5,11 +5,12 @@ import MetalKit
 public class ReaWindow: NSWindow {
     var renderer = Renderer()
     var metalView = MetalView()
+    var input = Input()
     
     public var scene: Scene? {
         didSet {
             renderer.delegate = scene
-            Input.instance.eventHandler = scene
+            input.mouseEventHandler = scene
         }
     }
     

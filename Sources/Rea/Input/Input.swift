@@ -9,18 +9,14 @@ import ReaCore
 
 @MainActor
 public class Input {
-    weak var eventHandler: InputEventHandler?
-    
-    private init() {} 
-    
-    public static let instance = Input() // Not sure about this singleton :/
-   
     #if os(macOS)
-    public var mousePosition: Vec2 = .zero
+    var mouseEventHandler: MouseEventHandler?
     #endif
+    
+    init() {}
 }
 
 @MainActor
-public protocol InputEventHandler: AnyObject {
-    func handleInput(event: Event)
+public protocol MouseEventHandler: AnyObject {
+    func mouseMoved(at position: Vec2)
 }

@@ -7,6 +7,7 @@
 
 #if os(macOS)
 import AppKit
+import ReaCore
 
 // I know it looks horrible, but I didn't really find a better way to
 // observe the events and getting, for example, the mouse location in the
@@ -14,22 +15,24 @@ import AppKit
 // MARK: - Mouse
 extension ReaWindow {
     public override func mouseMoved(with event: NSEvent) {
-        Input.instance.notify(event)
+        let location = event.locationInWindow
+        let mappedLocation: Vec2 = [Float(location.x), Float(location.y)]
+        input.mouseEventHandler?.mouseMoved(at: mappedLocation)
     }
     
     public override func mouseEntered(with event: NSEvent) {
-        Input.instance.notify(event)
+        
     }
     
     public override func mouseExited(with event: NSEvent) {
-        Input.instance.notify(event)
+        
     }
 }
 
 // MARK: - Keyboard
 extension ReaWindow {
     public override func keyDown(with event: NSEvent) {
-        Input.instance.notify(event)
+//        Input.instance.notify(event)
     }
 }
 #endif

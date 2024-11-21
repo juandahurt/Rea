@@ -11,6 +11,8 @@ import ReaCore
 class TestScene: Scene {
     var player: Entity!
     
+    var mousePos: Vec2 = .zero
+    
     override init() {
         super.init()
         player = entityManager.makeEntity()
@@ -18,14 +20,10 @@ class TestScene: Scene {
     
     override func update(deltaTime: Float) {
         let transform: TransformComponent = player.getComponent()
-        transform.position = Vec3(Input.instance.mousePosition, 0)
+        transform.position = Vec3(mousePos, 0)
     }
     
-    override func handleInput(event: Event) {
-        if case let .key(keyEvent) = event {
-            if case let .keyDown(key) = keyEvent {
-               print(key)
-            }
-        }
+    override func mouseMoved(at position: Vec2) {
+        mousePos = position
     }
 }
