@@ -7,6 +7,7 @@
 
 #include <simd/simd.h>
 
+typedef simd_float2 Vec2;
 typedef simd_float3 Vec3;
 typedef simd_float4 Vec4;
 
