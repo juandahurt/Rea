@@ -21,12 +21,12 @@ extension Scene: RendererDelegate {
     ) {
         for e in entityManager.entities {
             let transform: TransformComponent = e.getComponent()
-            translate(
-                &uniforms.model,
-                to: transform.position
-            )
-            encoder
-                .setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 10)
+            uniforms.model = transform.modelMatrix
+            encoder.setVertexBytes(
+                    &uniforms,
+                    length: MemoryLayout<Uniforms>.stride,
+                    index: 10
+                )
             let renderComponent: RenderableComponent = e.getComponent()
             encoder.setVertexBuffer(renderComponent.quad.vertexBuffer, offset: 0, index: 0)
             encoder
