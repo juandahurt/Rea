@@ -10,6 +10,8 @@ import Rea
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        Rea.load()
+        
         let window = ReaWindow(
             contentRect: .init(x: 0, y: 0, width: 800, height: 500),
             styleMask: [.titled, .closable, .resizable],

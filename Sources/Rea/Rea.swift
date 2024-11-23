@@ -1,3 +1,28 @@
+@MainActor
+public struct Rea {
+    public static func load() {
+        loadDependencies()
+    }
+    
+    private static func loadDependencies() {
+        Container.register { _ in
+            guard let device = MTLCreateSystemDefaultDevice() else {
+                fatalError("GPU not available (?)")
+            }
+            return device
+        }
+        
+        Container.register { c in
+            let device = c.retreive(MTLDevice.self)
+            guard let queue = device.makeCommandQueue() else {
+                fatalError("Couldn't make a command queue")
+            }
+            return queue
+        }
+    }
+}
+
+
 #if canImport(AppKit)
 import AppKit
 import MetalKit
