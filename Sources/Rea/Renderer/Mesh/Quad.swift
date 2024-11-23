@@ -11,10 +11,10 @@ import Metal
 @MainActor
 struct Quad {
     var vertices: [Vertex] = [
-        .init(position: [-0.25, -0.25, 0], color: [1, 0, 0, 1]),
-        .init(position: [0.25, 0.25, 0], color: [1, 0, 1, 1]),
-        .init(position: [-0.25, 0.25, 0], color: [1, 1, 0, 1]),
-        .init(position: [0.25, -0.25, 0], color: [0, 0, 1, 1]),
+        .init(position: [-1, -1, 0], color: [1, 0, 0, 1]),
+        .init(position: [1, 1, 0], color: [1, 0, 1, 1]),
+        .init(position: [-1, 1, 0], color: [1, 1, 0, 1]),
+        .init(position: [1, -1, 0], color: [0, 0, 1, 1]),
     ]
     var vertexBuffer: MTLBuffer?
     
