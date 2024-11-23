@@ -36,6 +36,7 @@ public class ReaWindow: NSWindow {
         didSet {
             renderer.delegate = scene
             input.mouseEventHandler = scene
+            input.keyEventHandler = scene
         }
     }
     

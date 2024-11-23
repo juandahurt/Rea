@@ -27,7 +27,21 @@ extension ReaWindow {
 // MARK: - Keyboard
 extension ReaWindow {
     public override func keyDown(with event: NSEvent) {
-        
+        guard let keyCode = KeyCode(rawValue: event.keyCode) else {
+            print("key not supported :c")
+            return
+        }
+        let key = Key(code: keyCode)
+        input.keyEventHandler?.keyDown(key)
+    }
+    
+    public override func keyUp(with event: NSEvent) {
+        guard let keyCode = KeyCode(rawValue: event.keyCode) else {
+            print("key not supported :c")
+            return
+        }
+        let key = Key(code: keyCode)
+        input.keyEventHandler?.keyUp(key)
     }
 }
 #endif
