@@ -32,7 +32,8 @@ class Renderer: NSObject {
     
     func setupPipeline() {
         // TODO: move this logic to another place
-        guard let library = try? Graphics.device.makeDefaultLibrary(bundle: .module) else {
+        let device = Container.retreive(MTLDevice.self)
+        guard let library = try? device.makeDefaultLibrary(bundle: .module) else {
             fatalError("Couldn't make default Metal library")
         }
         let vertexFunction = library.makeFunction(name: "vertex_function")
@@ -52,8 +53,7 @@ class Renderer: NSObject {
         pipelineDescriptor.fragmentFunction = fragmentFunction
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         
-        pipelineState = try? Graphics.device
-            .makeRenderPipelineState(descriptor: pipelineDescriptor)
+        pipelineState = try? device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
 }
 
@@ -74,8 +74,9 @@ extension Renderer: MTKViewDelegate {
     }
     
     func draw(in view: MTKView) {
+        let commandQueue = Container.retreive(MTLCommandQueue.self)
         guard
-            let commandBuffer = Graphics.commandQueue.makeCommandBuffer(),
+            let commandBuffer = commandQueue.makeCommandBuffer(),
             let passDescriptor = view.currentRenderPassDescriptor,
             let drawable = view.currentDrawable,
             let pipelineState = pipelineState

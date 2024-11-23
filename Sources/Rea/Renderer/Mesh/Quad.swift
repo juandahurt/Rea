@@ -25,11 +25,13 @@ struct Quad {
     var indexBuffer: MTLBuffer?
     
     init() {
-        vertexBuffer = Graphics.device.makeBuffer(
+        let device = Container.retreive(MTLDevice.self)
+        
+        vertexBuffer = device.makeBuffer(
             bytes: vertices,
             length: MemoryLayout<Vertex>.stride * vertices.count
         )
-        indexBuffer = Graphics.device.makeBuffer(
+        indexBuffer = device.makeBuffer(
             bytes: indices,
             length: MemoryLayout<UInt16>.stride * indices.count
         )

@@ -22,7 +22,7 @@ class TestScene: Scene {
     
     override func update(deltaTime: Float) {
         let transform: TransformComponent = player.getComponent()
-        transform.scale = abs(scale * sin(t * 0.5))
+        transform.scale = scale
         
         transform.position = [0, 10 * sin(t), 0]
         
