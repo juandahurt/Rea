@@ -11,13 +11,8 @@ import ReaCore
 public class Input {
     #if os(macOS)
     var mouseEventHandler: MouseEventHandler?
+    var keyEventHandler: KeyEventHandler?
     #endif
     
     init() {}
-}
-
-@MainActor
-public protocol MouseEventHandler: AnyObject {
-    func mouseMoved(at location: Vec2)
-    func mouseDown(at location: Vec2)
 }

@@ -24,3 +24,12 @@ extension Scene: MouseEventHandler {
     @objc
     open func mouseDown(at location: Vec2) {}
 }
+
+
+extension Scene: KeyEventHandler {
+    @objc
+    open func keyDown(_ key: Key) {}
+    
+    @objc
+    open func keyUp(_ key: Key) {}
+}
