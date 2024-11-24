@@ -9,10 +9,13 @@ import MetalKit
 import ReaCore
 import ReaMath
 
+// Do I really need to pass the renderer to the delegate? Probably not
 @MainActor
 protocol RendererDelegate: AnyObject {
     func renderer(_ renderer: Renderer, updateSceneWith deltaTime: Float)
     func renderer(_ renderer: Renderer, renderSceneUsing encoder: MTLRenderCommandEncoder, uniforms: inout Uniforms)
+    func renderer(_ renderer: Renderer, projectionMatrixForViewSize viewSize: CGSize) -> Mat4x4
+    func rendererViewMatrix(_ renderer: Renderer) -> Mat4x4
 }
 
 @MainActor
@@ -59,21 +62,16 @@ class Renderer: NSObject {
 
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        let aspect = size.width / size.height
-        let viewSize: CGFloat = 10
-        uniforms.projection = ortho(
-            .init(
-                x: -viewSize * aspect * 0.5,
-                y: viewSize * 0.5,
-                width: viewSize * aspect,
-                height: viewSize
-            ),
-            near: 0,
-            far: 10
-        )
+        guard let projection = delegate?.renderer(self, projectionMatrixForViewSize: size) else {
+            return
+        }
+        uniforms.projection = projection
     }
     
     func draw(in view: MTKView) {
+        guard let delegate else {
+            fatalError("renderer delegate cannot be nil!")
+        }
         let commandQueue = Container.retreive(MTLCommandQueue.self)
         guard
             let commandBuffer = commandQueue.makeCommandBuffer(),
@@ -84,24 +82,16 @@ extension Renderer: MTKViewDelegate {
             return
         }
         let deltaTime = calculateDeltaTime()
-        delegate?.renderer(self, updateSceneWith: deltaTime)
+        delegate.renderer(self, updateSceneWith: deltaTime)
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)!
         renderEncoder.setRenderPipelineState(pipelineState)
         
-        let viewSize: CGFloat = view.bounds.width / 4
-        let aspect = view.bounds.width / view.bounds.height
-        uniforms.projection = ortho(
-            .init(
-                x: -viewSize * aspect * 0.5,
-                y: viewSize * 0.5,
-                width: viewSize * aspect,
-                height: viewSize
-            ),
-            near: 0,
-            far: 10
-        )
-        uniforms.view = translate(to: [0, 0, 0])
-        delegate?.renderer(self, renderSceneUsing: renderEncoder, uniforms: &uniforms)
+        uniforms.projection = delegate.renderer(
+                self,
+                projectionMatrixForViewSize: view.frame.size
+            )
+        uniforms.view = delegate.rendererViewMatrix(self)
+        delegate.renderer(self, renderSceneUsing: renderEncoder, uniforms: &uniforms)
 
         renderEncoder.endEncoding()
         commandBuffer.present(drawable)
