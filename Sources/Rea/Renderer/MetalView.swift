@@ -12,8 +12,8 @@ class MetalView: MTKView {
         let device = Container.retreive(MTLDevice.self)
         super.init(frame: .zero, device: device)
         
-        colorPixelFormat = .bgra8Unorm
-        clearColor = .init(red: 0.2, green: 0.5, blue: 0.1, alpha: 1)
+        colorPixelFormat = Settings.pixelFormat
+        clearColor = Settings.defaultClearColor
     }
     
     required init(coder: NSCoder) {

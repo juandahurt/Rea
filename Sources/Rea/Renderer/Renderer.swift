@@ -42,16 +42,16 @@ class Renderer: NSObject {
         let vertexDescriptor = MTLVertexDescriptor()
         vertexDescriptor.attributes[0].format = .float3
         
-        vertexDescriptor.attributes[1].offset = MemoryLayout<SIMD3<Float>>.stride
+        vertexDescriptor.attributes[1].offset = MemoryLayout<Vec3>.stride
         vertexDescriptor.attributes[1].format = .float4
         
-        vertexDescriptor.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride + MemoryLayout<SIMD4<Float>>.stride
+        vertexDescriptor.layouts[0].stride = MemoryLayout<Vec3>.stride + MemoryLayout<Vec4>.stride
         
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexDescriptor = vertexDescriptor
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
-        pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        pipelineDescriptor.colorAttachments[0].pixelFormat = Settings.pixelFormat
         
         pipelineState = try? device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
