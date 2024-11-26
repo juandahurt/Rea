@@ -10,7 +10,7 @@ import ReaCore
 import ReaMath
 
 public enum CameraProjection {
-    case orthogonal // TODO: add perspective
+    case orthogonal, perspective
 }
 
 public class Camera {
@@ -23,19 +23,34 @@ public class Camera {
     
     func getProjectionMatrix(forSize viewSize: CGSize) -> Mat4x4 {
         let aspect = Float(viewSize.width / viewSize.height)
-        return ortho(
-            CGRect(
-                x: CGFloat(-size * aspect * 0.5),
-                y: .init(size * 0.5),
-                width: .init(size * aspect),
-                height: .init(size)
-            ),
-            near: clippingPlanes.near,
-            far: clippingPlanes.far
-        )
+        switch projection {
+        case .orthogonal:
+            return ortho(
+                CGRect(
+                    x: CGFloat(-size * aspect * 0.5),
+                    y: .init(size * 0.5),
+                    width: .init(size * aspect),
+                    height: .init(size)
+                ),
+                near: clippingPlanes.near,
+                far: clippingPlanes.far
+            )
+        case .perspective:
+            return ReaMath.projection(
+                projectionFov: (45 / 180) * .pi,
+                near: clippingPlanes.near,
+                far: clippingPlanes.far,
+                aspect: aspect
+            )
+        }
     }
     
     func getViewMatrix() -> Mat4x4 {
-        translate(to: position)
+        switch projection {
+        case .orthogonal:
+            return translate(to: position)
+        case .perspective:
+            return lookAt(eye: position, center: [0, 0 ,0], up: [0, 1, 0])
+        }
     }
 }

@@ -31,13 +31,15 @@ class TestScene: Scene {
     override init() {
         super.init()
         player = entityManager.makeEntity()
-        camera.size = 100
+    
+        camera.size = 8
+        camera.position = [0, 0, -15]
+        camera.clippingPlanes.far = 100
     }
     
     override func update(deltaTime: Float) {
         let transform: TransformComponent = player.getComponent()
         transform.scale = scale
-        
         transform.rotation = t
         
         t += 0.01
@@ -73,6 +75,11 @@ class TestScene: Scene {
         if key.code == .d {
             dirs[.right] = false
         }
+    }
+    
+    override func mouseDown(at location: Vec2) {
+        camera.projection = camera.projection == .orthogonal ? .perspective : .orthogonal
+        print("prjection: \(camera.projection)")
     }
 }
 

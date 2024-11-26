@@ -62,10 +62,8 @@ class Renderer: NSObject {
 
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        guard let projection = delegate?.renderer(self, projectionMatrixForViewSize: size) else {
-            return
-        }
-        uniforms.projection = projection
+        guard let delegate else { return }
+        uniforms.projection = delegate.renderer(self, projectionMatrixForViewSize: size)
     }
     
     func draw(in view: MTKView) {
@@ -87,9 +85,9 @@ extension Renderer: MTKViewDelegate {
         renderEncoder.setRenderPipelineState(pipelineState)
         
         uniforms.projection = delegate.renderer(
-                self,
-                projectionMatrixForViewSize: view.frame.size
-            )
+            self,
+            projectionMatrixForViewSize: view.frame.size
+        )
         uniforms.view = delegate.rendererViewMatrix(self)
         delegate.renderer(self, renderSceneUsing: renderEncoder, uniforms: &uniforms)
 
