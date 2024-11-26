@@ -15,12 +15,10 @@ class TestScene: Scene {
     
     var t: Float = 0
     
-    var velocity: Vec3 = .zero
-    
-    var velocityUp = Vec3(0, 1, 0)
-    var velocityDown = Vec3(0, -1, 0)
-    var velocityLeft = Vec3(-1, 0, 0)
-    var velocityRight = Vec3(1 , 0, 0)
+    var velocityUp = Vec3(0, 15, 0)
+    var velocityDown = Vec3(0, -15, 0)
+    var velocityLeft = Vec3(-15, 0, 0)
+    var velocityRight = Vec3(15, 0, 0)
     
     enum Dir { case up, down, left, right }
     var dirs: [Dir: Bool] = [
@@ -33,17 +31,20 @@ class TestScene: Scene {
     override init() {
         super.init()
         player = entityManager.makeEntity()
+    
+        camera.size = 8
+        camera.position = [0, 0, -15]
+        camera.clippingPlanes.far = 100
     }
     
     override func update(deltaTime: Float) {
         let transform: TransformComponent = player.getComponent()
         transform.scale = scale
-        
         transform.rotation = t
         
         t += 0.01
         
-        applyVelocity()
+        applyVelocity(deltaTime)
     }
     
     override func keyDown(_ key: Key) {
@@ -75,24 +76,29 @@ class TestScene: Scene {
             dirs[.right] = false
         }
     }
+    
+    override func mouseDown(at location: Vec2) {
+        camera.projection = camera.projection == .orthogonal ? .perspective : .orthogonal
+        print("prjection: \(camera.projection)")
+    }
 }
 
 
 extension TestScene {
-    func applyVelocity() {
+    func applyVelocity(_ deltaTime: Float) {
         let transfom: TransformComponent = player.getComponent()
         for (key, value) in dirs {
             if key == .up && value {
-                transfom.position += velocityUp
+                transfom.position += velocityUp * deltaTime
             }
             if key == .down && value {
-                transfom.position += velocityDown
+                transfom.position += velocityDown * deltaTime
             }
             if key == .left && value {
-                transfom.position += velocityLeft
+                transfom.position += velocityLeft * deltaTime
             }
             if key == .right && value {
-                transfom.position += velocityRight
+                transfom.position += velocityRight * deltaTime
             }
         }
     }

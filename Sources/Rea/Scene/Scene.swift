@@ -10,6 +10,7 @@ import ReaCore
 
 @MainActor
 open class Scene {
+    public var camera = Camera()
     public var entityManager = EntityManager()
     
     public init() {}

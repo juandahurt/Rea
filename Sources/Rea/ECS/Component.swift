@@ -20,7 +20,7 @@ public class TransformComponent: Component {
     
     var modelMatrix: Mat4x4 {
         let translated = translate(to: position)
-        let rotated = rotate(by: rotation)
+        let rotated = rotate(by: [rotation, rotation, rotation])
         let scaled = ReaMath.scale(by: [scale, scale, 0])
         return translated * rotated * scaled
     }

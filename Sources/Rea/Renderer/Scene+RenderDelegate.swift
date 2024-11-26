@@ -39,4 +39,12 @@ extension Scene: RendererDelegate {
                 )
         }
     }
+    
+    func renderer(_ renderer: Renderer, projectionMatrixForViewSize viewSize: CGSize) -> Mat4x4 {
+        camera.getProjectionMatrix(forSize: viewSize)
+    }
+    
+    func rendererViewMatrix(_ renderer: Renderer) -> Mat4x4 {
+        camera.getViewMatrix()
+    }
 }
