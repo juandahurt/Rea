@@ -9,10 +9,15 @@ import CoreGraphics
 import ReaCore
 import ReaMath
 
+public enum CameraProjection {
+    case orthogonal // TODO: add perspective
+}
+
 public class Camera {
     public var position: Vec3 = .zero
     public var size: Float = 10
     public var clippingPlanes: (near: Float, far: Float) = (0, 10)
+    public var projection: CameraProjection = .orthogonal
     
     init() {}
     
