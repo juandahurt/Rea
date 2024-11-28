@@ -14,6 +14,7 @@ class MetalView: MTKView {
         
         colorPixelFormat = Settings.pixelFormat
         clearColor = Settings.defaultClearColor
+        depthStencilPixelFormat = Settings.depthPixelFormat
     }
     
     required init(coder: NSCoder) {

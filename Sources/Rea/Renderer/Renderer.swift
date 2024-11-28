@@ -23,7 +23,9 @@ class Renderer: NSObject {
     weak var delegate: RendererDelegate?
     
     var pipelineState: MTLRenderPipelineState?
-   
+    var depthStencilState: MTLDepthStencilState?
+    var library: MTLLibrary!
+    
     var uniforms = Uniforms()
     
     private var lasTime = CFAbsoluteTimeGetCurrent()
@@ -39,24 +41,22 @@ class Renderer: NSObject {
         guard let library = try? device.makeDefaultLibrary(bundle: .module) else {
             fatalError("Couldn't make default Metal library")
         }
+        self.library = library
         let vertexFunction = library.makeFunction(name: "vertex_function")
         let fragmentFunction = library.makeFunction(name: "fragment_function")
         
-        let vertexDescriptor = MTLVertexDescriptor()
-        vertexDescriptor.attributes[0].format = .float3
-        
-        vertexDescriptor.attributes[1].offset = MemoryLayout<Vec3>.stride
-        vertexDescriptor.attributes[1].format = .float4
-        
-        vertexDescriptor.layouts[0].stride = MemoryLayout<Vec3>.stride + MemoryLayout<Vec4>.stride
-        
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
-        pipelineDescriptor.vertexDescriptor = vertexDescriptor
+        pipelineDescriptor.vertexDescriptor = .defaultLayout
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
         pipelineDescriptor.colorAttachments[0].pixelFormat = Settings.pixelFormat
-        
+        pipelineDescriptor.depthAttachmentPixelFormat = Settings.depthPixelFormat
         pipelineState = try? device.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        
+        let depthDescriptor = MTLDepthStencilDescriptor()
+        depthDescriptor.depthCompareFunction = .lessEqual
+        depthDescriptor.isDepthWriteEnabled = true
+        depthStencilState = device.makeDepthStencilState(descriptor: depthDescriptor)
     }
 }
 
@@ -82,8 +82,11 @@ extension Renderer: MTKViewDelegate {
         let deltaTime = calculateDeltaTime()
         delegate.renderer(self, updateSceneWith: deltaTime)
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor)!
+        renderEncoder.setTriangleFillMode(.lines)
+        renderEncoder.setDepthStencilState(depthStencilState)
         renderEncoder.setRenderPipelineState(pipelineState)
         
+        // TODO: find a way to prevent updating the projection matrix avery frame
         uniforms.projection = delegate.renderer(
             self,
             projectionMatrixForViewSize: view.frame.size

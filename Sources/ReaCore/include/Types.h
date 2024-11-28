@@ -14,8 +14,7 @@ typedef simd_float4 Vec4;
 typedef simd_float4x4 Mat4x4;
 
 typedef struct {
-    Vec3 position    [[attribute(0)]];
-    Vec4 color       [[attribute(1)]];
+    Vec4 position    [[attribute(0)]];
 } Vertex;
 
 typedef struct {

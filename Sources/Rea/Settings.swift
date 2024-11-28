@@ -15,5 +15,5 @@ struct Settings {
         blue: 0.8,
         alpha: 1
     )
-    
+    static let depthPixelFormat = MTLPixelFormat.depth16Unorm
 }

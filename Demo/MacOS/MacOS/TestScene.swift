@@ -15,8 +15,8 @@ class TestScene: Scene {
     
     var t: Float = 0
     
-    var velocityUp = Vec3(0, 15, 0)
-    var velocityDown = Vec3(0, -15, 0)
+    var velocityUp = Vec3(0, 0, 15)
+    var velocityDown = Vec3(0, 0, -15)
     var velocityLeft = Vec3(-15, 0, 0)
     var velocityRight = Vec3(15, 0, 0)
     
@@ -32,15 +32,17 @@ class TestScene: Scene {
         super.init()
         player = entityManager.makeEntity()
     
-        camera.size = 8
-        camera.position = [0, 0, -15]
-        camera.clippingPlanes.far = 100
+        camera.clippingPlanes.far = 200
+        camera.position = [0, 100, -150]
+        
+        let renderableComponent: RenderableComponent = player.getComponent()
+        renderableComponent.setMesh(fileName: "teapot", ext: "usdz")
     }
     
     override func update(deltaTime: Float) {
         let transform: TransformComponent = player.getComponent()
-        transform.scale = scale
-        transform.rotation = t
+        transform.rotation.y = t
+        transform.scale = 2
         
         t += 0.01
         
@@ -76,11 +78,6 @@ class TestScene: Scene {
             dirs[.right] = false
         }
     }
-    
-    override func mouseDown(at location: Vec2) {
-        camera.projection = camera.projection == .orthogonal ? .perspective : .orthogonal
-        print("prjection: \(camera.projection)")
-    }
 }
 
 
@@ -89,10 +86,10 @@ extension TestScene {
         let transfom: TransformComponent = player.getComponent()
         for (key, value) in dirs {
             if key == .up && value {
-                transfom.position += velocityUp * deltaTime
+                camera.position += velocityUp * deltaTime
             }
             if key == .down && value {
-                transfom.position += velocityDown * deltaTime
+                camera.position += velocityDown * deltaTime
             }
             if key == .left && value {
                 transfom.position += velocityLeft * deltaTime
