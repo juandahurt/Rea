@@ -30,7 +30,7 @@ extension Scene: RendererDelegate {
             let renderComponent: RenderableComponent = e.getComponent()
             guard let mesh = renderComponent.mesh else { return }
             encoder.setVertexBuffer(
-                mesh.vertexBuffers[0].buffer,
+                mesh.vertexBuffer,
                 offset: 0,
                 index: 0
             )
@@ -39,7 +39,7 @@ extension Scene: RendererDelegate {
                     type: .triangle,
                     indexCount: submesh.indexCount,
                     indexType: submesh.indexType,
-                    indexBuffer: submesh.indexBuffer.buffer,
+                    indexBuffer: submesh.indexBuffer,
                     indexBufferOffset: 0
                 )
             }

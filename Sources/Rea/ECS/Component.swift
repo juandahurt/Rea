@@ -27,7 +27,7 @@ public class TransformComponent: Component {
 }
 
 public class RenderableComponent: Component {
-    var mesh: MTKMesh?
+    var mesh: Mesh?
     
     @MainActor
     public func setMesh(fileName: String, ext: String) {
@@ -54,7 +54,7 @@ public class RenderableComponent: Component {
                 print("only the first one will be linked with the entity")
             }
             let mdlMesh = mdlMeshes.first!
-            mesh = try? MTKMesh(mesh: mdlMesh, device: device)
+            mesh = Mesh(from: mdlMesh)
         } else {
             print("couldn't find any model in file \(fileName).\(ext)")
         }
