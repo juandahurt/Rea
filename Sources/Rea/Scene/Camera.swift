@@ -16,8 +16,8 @@ public enum CameraProjection {
 public class Camera {
     public var position: Vec3 = .zero
     public var size: Float = 10
-    public var clippingPlanes: (near: Float, far: Float) = (0, 10)
-    public var projection: CameraProjection = .orthogonal
+    public var clippingPlanes: (near: Float, far: Float) = (0.1, 100)
+    public var projection: CameraProjection = .perspective
     
     init() {}
     

@@ -28,15 +28,21 @@ extension Scene: RendererDelegate {
                     index: 10
                 )
             let renderComponent: RenderableComponent = e.getComponent()
-            encoder.setVertexBuffer(renderComponent.quad.vertexBuffer, offset: 0, index: 0)
-            encoder
-                .drawIndexedPrimitives(
+            guard let mesh = renderComponent.mesh else { return }
+            encoder.setVertexBuffer(
+                mesh.vertexBuffer,
+                offset: 0,
+                index: 0
+            )
+            for submesh in mesh.submeshes {
+                encoder.drawIndexedPrimitives(
                     type: .triangle,
-                    indexCount: renderComponent.quad.indices.count,
-                    indexType: .uint16,
-                    indexBuffer: renderComponent.quad.indexBuffer!,
+                    indexCount: submesh.indexCount,
+                    indexType: submesh.indexType,
+                    indexBuffer: submesh.indexBuffer,
                     indexBufferOffset: 0
                 )
+            }
         }
     }
     
