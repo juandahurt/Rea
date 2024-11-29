@@ -31,33 +31,10 @@ public class RenderableComponent: Component {
     
     @MainActor
     public func setMesh(fileName: String, ext: String) {
-        guard let assetURL = Bundle.main.url(
-            forResource: fileName,
-            withExtension: ext
-        ) else {
-            print("\(fileName).\(ext) not found!")
-            return
-        }
-        
-        let device = Container.retreive(MTLDevice.self)
-        let bufferAllocator = MTKMeshBufferAllocator(device: device)
-        
-        let asset = MDLAsset(
-            url: assetURL,
-            vertexDescriptor: .defaultLayout,
-            bufferAllocator: bufferAllocator
-        )
-        
-        if let mdlMeshes = asset.childObjects(of: MDLMesh.self) as? [MDLMesh], !mdlMeshes.isEmpty {
-            if mdlMeshes.count > 1 {
-                print("several models found in file \(fileName).\(ext)")
-                print("only the first one will be linked with the entity")
-            }
-            let mdlMesh = mdlMeshes.first!
-            mesh = Mesh(from: mdlMesh)
-        } else {
-            print("couldn't find any model in file \(fileName).\(ext)")
-        }
+        // how to handle the error?
+        // I suppose that printing an error is enough for now
+        let meshLoader = MeshLoader()
+        mesh = meshLoader.load(fromFile: fileName, withExtension: ext)
     }
 }
 
