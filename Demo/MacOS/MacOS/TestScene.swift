@@ -10,6 +10,7 @@ import ReaCore
 
 class TestScene: Scene {
     var player: Entity!
+    var player2: Entity!
     
     var scale: Float = 10
     
@@ -31,12 +32,20 @@ class TestScene: Scene {
     override init() {
         super.init()
         player = entityManager.makeEntity()
+        player2 = entityManager.makeEntity()
     
         camera.clippingPlanes.far = 200
         camera.position = [0, 100, -150]
         
         let renderableComponent: RenderableComponent = player.getComponent()
         renderableComponent.setMesh(fileName: "teapot", ext: "usdz")
+        
+        let renderableComponent2: RenderableComponent = player2.getComponent()
+        renderableComponent2.setMesh(fileName: "train", ext: "usdz")
+        
+        let transform: TransformComponent = player2.getComponent()
+        transform.position.x = -20
+        transform.scale = 20
     }
     
     override func update(deltaTime: Float) {
