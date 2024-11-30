@@ -32,20 +32,20 @@ class TestScene: Scene {
     override init() {
         super.init()
         player = makeEntity()
-//        player2 = makeEntity()
+        player2 = makeEntity()
     
         camera.clippingPlanes.far = 200
         camera.position = [0, 10, -150]
         
-//        let renderableComponent = player.getComponent(RenderableComponent.self)
-////        renderableComponent.setMesh(fileName: "teapot", ext: "usdz")
-//        
-//        let renderableComponent2 = player2.getComponent(RenderableComponent.self)
-////        renderableComponent2.setMesh(fileName: "train", ext: "usdz")
-//        
-//        let transform = player2.getComponent(TransformComponent.self)
-//        transform.position.x = -20
-//        transform.scale = 20
+        let renderableComponent = player.getComponent(RenderableComponent.self)
+        renderableComponent.setMesh(fileName: "teapot", ext: "usdz")
+        
+        let renderableComponent2 = player2.getComponent(RenderableComponent.self)
+        renderableComponent2.setMesh(fileName: "train", ext: "usdz")
+        
+        let transform = player2.getComponent(TransformComponent.self)
+        transform.position.x = -20
+        transform.scale = 20
     }
     
     override func update(deltaTime: Float) {
@@ -89,12 +89,13 @@ class TestScene: Scene {
     }
     
     override func mouseDown(at location: Vec2) {
-        let e = makeEntity()
-        let transform = e.getComponent(TransformComponent.self)
-//        transform.rotation.x = .random(in: 0...45)
-//        transform.scale = 12
-        
-        e.getComponent(RenderableComponent.self).setMesh(fileName: "train", ext: "usdz")
+        camera.fov += 5
+//        let e = makeEntity()
+//        let transform = e.getComponent(TransformComponent.self)
+////        transform.rotation.x = .random(in: 0...45)
+////        transform.scale = 12
+//        
+//        e.getComponent(RenderableComponent.self).setMesh(fileName: "train", ext: "usdz")
     }
 }
 

@@ -6,7 +6,7 @@
 //
 
 class MemoryPool {
-    var numEntities: Int = 4
+    let maxNumEntities = Settings.maxNumEntities
     var pool: (
         transform: UnsafeMutableBufferPointer<TransformComponent>,
         renderable: UnsafeMutableBufferPointer<RenderableComponent>
@@ -22,32 +22,32 @@ class MemoryPool {
     init() {
         var transforms: [TransformComponent] = []
         transforms
-            .append(contentsOf: (0..<numEntities).map { _ in TransformComponent() })
+            .append(contentsOf: (0..<maxNumEntities).map { _ in TransformComponent() })
         let transformPointer: UnsafeMutablePointer<TransformComponent> = .allocate(
-            capacity: numEntities
+            capacity: maxNumEntities
         )
         let transformBuffer = UnsafeMutableBufferPointer(
             start: transformPointer,
-            count: numEntities
+            count: maxNumEntities
         )
         transformBuffer.initialize(fromContentsOf: transforms)
         pool.transform = transformBuffer
         
         var renderables: [RenderableComponent] = []
         renderables
-            .append(contentsOf: (0..<numEntities).map { _ in RenderableComponent() })
+            .append(contentsOf: (0..<maxNumEntities).map { _ in RenderableComponent() })
         let renderablePointer: UnsafeMutablePointer<RenderableComponent> = .allocate(
-            capacity: numEntities
+            capacity: maxNumEntities
         )
         let renderableBuffer = UnsafeMutableBufferPointer(
             start: renderablePointer,
-            count: numEntities
+            count: maxNumEntities
         )
         renderableBuffer.initialize(fromContentsOf: renderables)
         pool.renderable = renderableBuffer
         
-        let flagsPointer: UnsafeMutablePointer<Bool> = .allocate(capacity: numEntities)
-        activeFlags = UnsafeMutableBufferPointer(start: flagsPointer, count: numEntities)
+        let flagsPointer: UnsafeMutablePointer<Bool> = .allocate(capacity: maxNumEntities)
+        activeFlags = UnsafeMutableBufferPointer(start: flagsPointer, count: maxNumEntities)
     }
     
     deinit {

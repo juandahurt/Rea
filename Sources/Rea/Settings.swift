@@ -16,4 +16,6 @@ struct Settings {
         alpha: 1
     )
     static let depthPixelFormat = MTLPixelFormat.depth16Unorm
+    
+    static let maxNumEntities = 100
 }
