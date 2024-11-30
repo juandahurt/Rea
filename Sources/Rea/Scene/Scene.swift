@@ -11,13 +11,14 @@ import ReaCore
 @MainActor
 open class Scene {
     public var camera = Camera()
-    public var entityManager = EntityManager()
+    var entityManager = EntityManager()
     
     public init() {}
     
     open func update(deltaTime: Float) {}
 }
 
+// MARK: - Mouse Event Handler
 extension Scene: MouseEventHandler {
     @objc
     open func mouseMoved(at location: Vec2) {}
@@ -26,7 +27,7 @@ extension Scene: MouseEventHandler {
     open func mouseDown(at location: Vec2) {}
 }
 
-
+// MARK: - Keyboard Event Handler
 extension Scene: KeyEventHandler {
     @objc
     open func keyDown(_ key: Key) {}

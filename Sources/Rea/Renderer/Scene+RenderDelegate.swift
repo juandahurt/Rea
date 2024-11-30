@@ -19,16 +19,19 @@ extension Scene: RendererDelegate {
         renderSceneUsing encoder: any MTLRenderCommandEncoder,
         uniforms: inout Uniforms
     ) {
+        entityManager.update()
+        
+        print("num entities: \(entityManager.entities.count)")
         for e in entityManager.entities {
-            let transform: TransformComponent = e.getComponent()
+            let transform = e.getComponent(TransformComponent.self)
             uniforms.model = transform.modelMatrix
             encoder.setVertexBytes(
                     &uniforms,
                     length: MemoryLayout<Uniforms>.stride,
                     index: 10
                 )
-            let renderComponent: RenderableComponent = e.getComponent()
-            guard let mesh = renderComponent.mesh else { return }
+            let renderComponent = e.getComponent(RenderableComponent.self)
+            guard let mesh = renderComponent.mesh else { continue }
             encoder.setVertexBuffer(
                 mesh.vertexBuffer,
                 offset: 0,

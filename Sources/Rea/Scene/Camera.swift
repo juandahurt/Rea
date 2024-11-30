@@ -50,7 +50,7 @@ public class Camera {
         case .orthogonal:
             return translate(to: position)
         case .perspective:
-            return lookAt(eye: position, center: [0, 0 ,0], up: [0, 1, 0])
+            return lookAt(eye: position, center: [0, 0, 0], up: [0, 1, 0])
         }
     }
 }
