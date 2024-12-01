@@ -5,7 +5,7 @@
 //  Created by Juan Hurtado on 1/12/24.
 //
 
-extension UnsafeMutableBufferPointer where Element: Component {
+extension UnsafeMutableBufferPointer {
     static func allocate(
         capacity: Int,
         intializingWith closure: () -> Element

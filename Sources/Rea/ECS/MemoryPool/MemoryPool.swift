@@ -11,43 +11,49 @@ class MemoryPool {
         transform: UnsafeMutableBufferPointer<TransformComponent>,
         renderable: UnsafeMutableBufferPointer<RenderableComponent>
     )
-    // indicate if an entity is active or not
-    var activeFlags: UnsafeMutableBufferPointer<Bool>
-    
-    var index = -1 // TODO: remove
+    /// indicate if an entity is active or not
+    var activeIndicators: UnsafeMutableBufferPointer<Bool>
     
     @MainActor
-    private static let instance = MemoryPool()
+    private static let _instance = MemoryPool()
     
     init() {
         pool.transform = .allocate(capacity: maxNumEntities) { TransformComponent() }
         pool.renderable = .allocate(capacity: maxNumEntities) { RenderableComponent() }
         
-        let flagsPointer: UnsafeMutablePointer<Bool> = .allocate(capacity: maxNumEntities)
-        activeFlags = UnsafeMutableBufferPointer(start: flagsPointer, count: maxNumEntities)
+        activeIndicators = .allocate(capacity: maxNumEntities) { false }
     }
     
     deinit {
         pool.transform.deallocate()
         pool.renderable.deallocate()
-        activeFlags.deallocate()
+        activeIndicators.deallocate()
+    }
+    
+    func findNextIndex() -> Int? {
+        for index in 0..<maxNumEntities {
+            if !activeIndicators[index] { return index }
+        }
+        return nil
     }
     
     @MainActor
     static func makeEntityID() -> Int {
-//        for i in
-        // TODO: find nearest available index
-        instance.index += 1
-        return instance.index
+        guard let index = _instance.findNextIndex() else {
+            // TODO: handle error when user needs more entities that maxNumEntities
+            fatalError("no memory available for new entity")
+        }
+        _instance.activeIndicators[index] = true
+        return index
     }
     
     @MainActor
     static func getComponent<T: Component>(_ component: T.Type, ofEntityAt index: Int) -> T {
         if component is TransformComponent.Type {
-            return instance.pool.transform[index] as! T
+            return _instance.pool.transform[index] as! T
         }
         if component is RenderableComponent.Type {
-            return instance.pool.renderable[index] as! T
+            return _instance.pool.renderable[index] as! T
         }
         fatalError("?")
     }
