@@ -9,9 +9,7 @@ import MetalKit
 import ReaCore
 import ReaMath
 
-public class Component {
-    var isActive = false
-}
+public class Component {}
 
 public class TransformComponent: Component {
     public var position: Vec3 = .zero

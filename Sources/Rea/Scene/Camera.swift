@@ -18,6 +18,7 @@ public class Camera {
     public var size: Float = 10
     public var clippingPlanes: (near: Float, far: Float) = (0.1, 100)
     public var projection: CameraProjection = .perspective
+    public var fov: Float = 45
     
     init() {}
     
@@ -37,7 +38,7 @@ public class Camera {
             )
         case .perspective:
             return ReaMath.projection(
-                projectionFov: (45 / 180) * .pi,
+                projectionFov: (fov / 180) * .pi,
                 near: clippingPlanes.near,
                 far: clippingPlanes.far,
                 aspect: aspect
@@ -50,7 +51,7 @@ public class Camera {
         case .orthogonal:
             return translate(to: position)
         case .perspective:
-            return lookAt(eye: position, center: [0, 0 ,0], up: [0, 1, 0])
+            return lookAt(eye: position, center: [0, 0, 0], up: [0, 1, 0])
         }
     }
 }

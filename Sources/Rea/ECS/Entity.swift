@@ -6,22 +6,14 @@
 //
 
 public class Entity {
-    var id: UInt8 // TODO: maybe have a type alias for this
-    private var components: [Component] = [
-        TransformComponent(),
-        RenderableComponent()
-    ] // TODO: create a memory pool
+    var id: Int // TODO: maybe have a type alias for this
     
-    init(_ id: UInt8) {
+    init(_ id: Int) {
         self.id = id
     }
-    
-    public func getComponent<T: Component>() -> T {
-        for c in components {
-            if let c = c as? T {
-                return c
-            }
-        }
-        fatalError("")
+   
+    @MainActor
+    public func getComponent<T: Component>(_ type: T.Type) -> T {
+        MemoryPool.getComponent(type, ofEntityAt: id)
     }
 }
