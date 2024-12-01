@@ -21,7 +21,6 @@ extension Scene: RendererDelegate {
     ) {
         entityManager.update()
         
-        print("num entities: \(entityManager.entities.count)")
         for e in entityManager.entities {
             let transform = e.getComponent(TransformComponent.self)
             uniforms.model = transform.modelMatrix
