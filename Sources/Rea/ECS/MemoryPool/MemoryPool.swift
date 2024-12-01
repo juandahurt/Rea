@@ -5,6 +5,8 @@
 //  Created by Juan Hurtado on 29/11/24.
 //
 
+// TODO: add `removeEntity` method
+
 class MemoryPool {
     let maxNumEntities = Settings.maxNumEntities
     var pool: (
@@ -40,7 +42,7 @@ class MemoryPool {
     @MainActor
     static func makeEntityID() -> Int {
         guard let index = _instance.findNextIndex() else {
-            // TODO: handle error when user needs more entities that maxNumEntities
+            // TODO: handle error when user needs more entities than maxNumEntities
             fatalError("no memory available for new entity")
         }
         _instance.activeIndicators[index] = true
