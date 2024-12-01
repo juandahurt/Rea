@@ -8,8 +8,9 @@
 extension UnsafeMutableBufferPointer where Element: Component {
     static func allocate(
         capacity: Int,
-        with values: [Element]
+        intializingWith closure: () -> Element
     ) -> UnsafeMutableBufferPointer<Element> {
+        let values: [Element] = (0..<capacity).map { _ in closure() }
         let pointer: UnsafeMutablePointer<Element> = .allocate(
             capacity: capacity
         )

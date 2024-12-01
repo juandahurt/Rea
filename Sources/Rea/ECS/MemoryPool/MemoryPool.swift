@@ -20,15 +20,8 @@ class MemoryPool {
     private static let instance = MemoryPool()
     
     init() {
-        var transforms: [TransformComponent] = []
-        transforms
-            .append(contentsOf: (0..<maxNumEntities).map { _ in TransformComponent() })
-        pool.transform = .allocate(capacity: maxNumEntities, with: transforms)
-        
-        var renderables: [RenderableComponent] = []
-        renderables
-            .append(contentsOf: (0..<maxNumEntities).map { _ in RenderableComponent() })
-        pool.renderable = .allocate(capacity: maxNumEntities, with: renderables)
+        pool.transform = .allocate(capacity: maxNumEntities) { TransformComponent() }
+        pool.renderable = .allocate(capacity: maxNumEntities) { RenderableComponent() }
         
         let flagsPointer: UnsafeMutablePointer<Bool> = .allocate(capacity: maxNumEntities)
         activeFlags = UnsafeMutableBufferPointer(start: flagsPointer, count: maxNumEntities)
