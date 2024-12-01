@@ -15,7 +15,7 @@ class MemoryPool {
     var activeFlags: UnsafeMutableBufferPointer<Bool>
     
     var index = -1 // TODO: remove
-   
+    
     @MainActor
     private static let instance = MemoryPool()
     
@@ -23,35 +23,18 @@ class MemoryPool {
         var transforms: [TransformComponent] = []
         transforms
             .append(contentsOf: (0..<maxNumEntities).map { _ in TransformComponent() })
-        let transformPointer: UnsafeMutablePointer<TransformComponent> = .allocate(
-            capacity: maxNumEntities
-        )
-        let transformBuffer = UnsafeMutableBufferPointer(
-            start: transformPointer,
-            count: maxNumEntities
-        )
-        transformBuffer.initialize(fromContentsOf: transforms)
-        pool.transform = transformBuffer
+        pool.transform = .allocate(capacity: maxNumEntities, with: transforms)
         
         var renderables: [RenderableComponent] = []
         renderables
             .append(contentsOf: (0..<maxNumEntities).map { _ in RenderableComponent() })
-        let renderablePointer: UnsafeMutablePointer<RenderableComponent> = .allocate(
-            capacity: maxNumEntities
-        )
-        let renderableBuffer = UnsafeMutableBufferPointer(
-            start: renderablePointer,
-            count: maxNumEntities
-        )
-        renderableBuffer.initialize(fromContentsOf: renderables)
-        pool.renderable = renderableBuffer
+        pool.renderable = .allocate(capacity: maxNumEntities, with: renderables)
         
         let flagsPointer: UnsafeMutablePointer<Bool> = .allocate(capacity: maxNumEntities)
         activeFlags = UnsafeMutableBufferPointer(start: flagsPointer, count: maxNumEntities)
     }
     
     deinit {
-        print("deinit")
         pool.transform.deallocate()
         pool.renderable.deallocate()
         activeFlags.deallocate()
@@ -59,6 +42,7 @@ class MemoryPool {
     
     @MainActor
     static func makeEntityID() -> Int {
+//        for i in
         // TODO: find nearest available index
         instance.index += 1
         return instance.index
